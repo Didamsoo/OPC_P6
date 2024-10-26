@@ -4,7 +4,17 @@ const { upload, processImage } = require('../middlewares/multer-config');
 const auth = require('../middlewares/auth');
 const Book = require('../models/book');
 
-
+// Route pour récupérer les livres les mieux notés
+router.get('/bestrating', async (req, res) => {
+  try {
+    // Je récupère les 3 livres ayant la meilleure moyenne de notes, triés par ordre décroissant
+    const bestRatedBooks = await Book.find().sort({ averageRating: -1 }).limit(3);
+    res.status(200).json(bestRatedBooks); // J'envoie les livres au client avec un code de succès 200
+  } catch (error) {
+    // En cas d'erreur, je retourne un code 500 avec le message d'erreur
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Route pour récupérer tous les livres
 router.get('/', async (req, res) => {
@@ -142,16 +152,6 @@ router.post('/:id/rating', auth, async (req, res) => {
 });
 
 
-// Route pour récupérer les livres les mieux notés
-router.get('/bestrating', async (req, res) => {
-  try {
-    // Je récupère les 3 livres ayant la meilleure moyenne de notes, triés par ordre décroissant
-    const bestRatedBooks = await Book.find().sort({ averageRating: -1 }).limit(3);
-    res.status(200).json(bestRatedBooks); // J'envoie les livres au client avec un code de succès 200
-  } catch (error) {
-    // En cas d'erreur, je retourne un code 500 avec le message d'erreur
-    res.status(500).json({ error: error.message });
-  }
-});
+
 
 module.exports = router; // J'exporte le routeur pour l'utiliser ailleurs
