@@ -53,6 +53,9 @@
     background-size: cover;
     margin-right: 80px;
     margin-left: 120px;
+    width: 463px; 
+    height: 568px; 
+    object-fit: cover; 
 }
 .Book img {
     width: 40%;
